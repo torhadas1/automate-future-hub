@@ -1,4 +1,3 @@
-
 const Footer = () => {
   return (
     <footer className="bg-slate-900 text-white py-12">
@@ -7,9 +6,9 @@ const Footer = () => {
           <div className="md:col-span-2">
             <div className="flex items-center space-x-2 mb-4">
               <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">A</span>
+                <span className="text-white font-bold text-sm">B</span>
               </div>
-              <span className="text-xl font-bold">AutoFlow</span>
+              <span className="text-xl font-bold">BuildYourFlow</span>
             </div>
             <p className="text-slate-400 mb-6 max-w-md">
               We help businesses automate their workflows using n8n and AI integration, 
@@ -45,7 +44,7 @@ const Footer = () => {
 
         <div className="border-t border-slate-800 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-slate-400 text-sm">
-            © 2024 AutoFlow. All rights reserved.
+            © 2024 BuildYourFlow. All rights reserved.
           </p>
           <div className="flex space-x-6 mt-4 md:mt-0">
             <a href="#" className="text-slate-400 hover:text-white text-sm transition-colors">Privacy Policy</a>
