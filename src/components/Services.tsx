@@ -1,67 +1,73 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Code, Calendar, Send } from "lucide-react";
+import { Workflow, Bot, DollarSign, Megaphone } from "lucide-react";
 
 const Services = () => {
   const services = [
     {
-      icon: Code,
+      icon: <Workflow className="w-8 h-8 text-blue-400" />,
       title: "Business Process Automation",
-      description: "Streamline your operations with intelligent workflows that handle repetitive tasks, data processing, and cross-platform integrations.",
-      features: ["CRM Integration", "Data Synchronization", "Task Management", "Reporting Automation"]
+      description: "Transform manual workflows into intelligent, automated systems using n8n. We design custom solutions that handle everything from data entry to complex decision-making processes.",
+      features: ["Custom n8n workflows", "Process optimization", "Integration setup", "Performance monitoring"]
     },
     {
-      icon: Calendar,
+      icon: <DollarSign className="w-8 h-8 text-purple-400" />,
       title: "Finance & Accounting Automation",
-      description: "Automate invoice processing, expense tracking, financial reporting, and payment workflows with precision and compliance.",
-      features: ["Invoice Processing", "Expense Management", "Financial Reports", "Payment Workflows"]
+      description: "Streamline your financial operations with automated invoice processing, expense tracking, and reporting. Our AI-powered solutions ensure accuracy and compliance.",
+      features: ["Invoice automation", "Expense categorization", "Financial reporting", "Compliance monitoring"]
     },
     {
-      icon: Send,
-      title: "Marketing Automation",
-      description: "Create sophisticated marketing campaigns with AI-powered personalization, lead nurturing, and multi-channel communication.",
-      features: ["Email Campaigns", "Lead Scoring", "Social Media", "Analytics Integration"]
+      icon: <Megaphone className="w-8 h-8 text-green-400" />,
+      title: "Marketing Campaign Automation",
+      description: "Create sophisticated multi-channel marketing campaigns that adapt to customer behavior. From lead generation to conversion tracking, we automate it all.",
+      features: ["Lead generation", "Email sequences", "Social media automation", "Analytics integration"]
+    },
+    {
+      icon: <Bot className="w-8 h-8 text-orange-400" />,
+      title: "AI Integration & Enhancement",
+      description: "Enhance your workflows with cutting-edge AI capabilities. We integrate machine learning models and AI services to make your automations truly intelligent.",
+      features: ["AI-powered decisions", "Natural language processing", "Predictive analytics", "Smart notifications"]
     }
   ];
 
   return (
-    <section className="py-20 bg-slate-50 relative">
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-blue-50/30 to-transparent"></div>
-      
-      <div className="relative z-10 max-w-7xl mx-auto px-6">
+    <section id="services" className="py-20 bg-slate-900 relative">
+      <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6">
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
             Our Automation
-            <span className="block bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <span className="block bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
               Expertise
             </span>
           </h2>
-          <p className="text-xl text-slate-600 max-w-3xl mx-auto">
-            We specialize in creating custom n8n workflows that transform how businesses operate, 
-            with AI integration that makes your processes smarter and more efficient.
+          <p className="text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
+            We specialize in creating intelligent automation solutions that transform how businesses operate. 
+            Our expertise spans across multiple domains, ensuring comprehensive digital transformation.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-2 gap-8">
           {services.map((service, index) => (
-            <Card key={index} className="group relative bg-white/80 backdrop-blur-sm border-slate-200 hover:border-blue-300 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-purple-50/50 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              
-              <CardHeader className="relative z-10">
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-                  <service.icon className="w-6 h-6 text-white" />
+            <Card key={index} className="group bg-slate-800 border-slate-700 hover:border-blue-500 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
+              <CardHeader>
+                <div className="flex items-center space-x-4 mb-4">
+                  <div className="p-3 bg-slate-700 rounded-lg group-hover:bg-slate-600 transition-colors duration-300">
+                    {service.icon}
+                  </div>
+                  <CardTitle className="text-2xl font-bold text-white group-hover:text-blue-400 transition-colors duration-300">
+                    {service.title}
+                  </CardTitle>
                 </div>
-                <CardTitle className="text-xl font-bold text-slate-900">{service.title}</CardTitle>
-                <CardDescription className="text-slate-600 leading-relaxed">
+                <CardDescription className="text-slate-300 leading-relaxed text-base">
                   {service.description}
                 </CardDescription>
               </CardHeader>
               
-              <CardContent className="relative z-10">
+              <CardContent>
                 <ul className="space-y-2">
-                  {service.features.map((feature, idx) => (
-                    <li key={idx} className="flex items-center text-slate-700">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
+                  {service.features.map((feature, featureIndex) => (
+                    <li key={featureIndex} className="flex items-center text-slate-400">
+                      <div className="w-2 h-2 bg-blue-400 rounded-full mr-3"></div>
                       {feature}
                     </li>
                   ))}
