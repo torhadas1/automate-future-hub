@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Calendar, ArrowUp } from "lucide-react";
@@ -46,7 +45,7 @@ const BlogPreview = () => {
   };
 
   return (
-    <section className="py-20 bg-slate-900 relative">
+    <section className="py-20 bg-slate-800 relative">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
@@ -65,7 +64,7 @@ const BlogPreview = () => {
           {blogPosts.map((post, index) => (
             <Card 
               key={index} 
-              className="group bg-slate-800 border-slate-700 hover:border-blue-500 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg cursor-pointer"
+              className="group bg-slate-700 border-slate-600 hover:border-blue-500 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg cursor-pointer"
               onClick={() => handleBlogClick(post.slug)}
             >
               <CardHeader>
@@ -98,7 +97,7 @@ const BlogPreview = () => {
             variant="outline" 
             size="lg"
             onClick={handleViewAll}
-            className="border-slate-600 text-slate-300 hover:bg-slate-800 hover:text-white px-8 py-4 rounded-full transition-all duration-300 hover:scale-105"
+            className="px-8 py-4 rounded-full transition-all duration-300 hover:scale-105"
           >
             View All Articles
           </Button>

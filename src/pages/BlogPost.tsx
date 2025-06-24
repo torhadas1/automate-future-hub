@@ -1,4 +1,3 @@
-
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Calendar, ArrowLeft } from "lucide-react";
@@ -97,13 +96,13 @@ const BlogPost = () => {
           <Button 
             onClick={() => navigate('/blog')} 
             variant="outline" 
-            className="mb-8 border-slate-600 text-slate-300 hover:bg-slate-800"
+            className="mb-8"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Blog
           </Button>
 
-          <article className="bg-slate-800 rounded-lg p-8 border border-slate-700">
+          <article className="bg-slate-700 rounded-lg p-8 border border-slate-600">
             <div className="mb-6">
               <span className="text-sm font-medium text-blue-400 bg-blue-500/20 px-3 py-1 rounded-full">
                 {post.category}
@@ -114,13 +113,13 @@ const BlogPost = () => {
               {post.title}
             </h1>
             
-            <div className="flex items-center text-slate-400 mb-8">
+            <div className="flex items-center text-slate-300 mb-8">
               <Calendar className="w-4 h-4 mr-2" />
               {post.date} • {post.readTime}
             </div>
 
             <div 
-              className="prose prose-lg prose-invert max-w-none"
+              className="prose prose-lg prose-invert max-w-none prose-headings:text-white prose-p:text-slate-200 prose-li:text-slate-200"
               dangerouslySetInnerHTML={{ __html: post.content }}
             />
           </article>
