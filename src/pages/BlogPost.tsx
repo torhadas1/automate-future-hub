@@ -3,12 +3,53 @@ import { Button } from "@/components/ui/button";
 import { Calendar, ArrowLeft } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { useEffect } from "react";
-import blogPosts from "@/data/blogPosts.json";
+import { useEffect, useState } from "react";
+
+type BlogPost = {
+  title: string;
+  content: string;
+  date: string;
+  readTime: string;
+  category: string;
+};
+
+type BlogPosts = {
+  [key: string]: BlogPost;
+};
 
 const BlogPost = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
+  const [post, setPost] = useState<BlogPost | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch blog posts from public directory
+  useEffect(() => {
+    const fetchBlogPosts = async () => {
+      try {
+        // Get base URL from import.meta.env or use empty string as fallback
+        const baseUrl = import.meta.env.BASE_URL || '';
+        const response = await fetch(`${baseUrl}/blogPosts.json`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch blog posts');
+        }
+        
+        const data: BlogPosts = await response.json();
+        if (slug && data[slug]) {
+          setPost(data[slug]);
+        } else {
+          setPost(null);
+        }
+      } catch (error) {
+        console.error('Error loading blog posts:', error);
+        setPost(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBlogPosts();
+  }, [slug]);
 
   // Inject CSS rules for blog content when component mounts
   useEffect(() => {
@@ -50,7 +91,15 @@ const BlogPost = () => {
     return () => styleEl.remove();
   }, []);
 
-  const post = blogPosts[slug || ""];
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-slate-900 flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-white mb-4">Loading...</h1>
+        </div>
+      </div>
+    );
+  }
 
   if (!post) {
     return (

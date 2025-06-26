@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -14,18 +13,47 @@ const ContactCTA = () => {
     company: "",
     message: ""
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Contact form submitted:", formData);
+    setIsSubmitting(true);
     
-    toast({
-      title: "Message Sent!",
-      description: "We'll get back to you within 24 hours to discuss your automation needs.",
-    });
-    
-    setFormData({ name: "", email: "", company: "", message: "" });
+    try {
+      // Send data to n8n webhook
+      const response = await fetch('http://localhost:5678/webhook-test/de904770-7228-4f58-92f8-ea69ca258e05', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to submit form');
+      }
+      
+      // Success message
+      toast({
+        title: "Message Sent!",
+        description: "We'll get back to you within 24 hours to discuss your automation needs.",
+      });
+      
+      // Reset form
+      setFormData({ name: "", email: "", company: "", message: "" });
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      
+      // Error message
+      toast({
+        title: "Submission Failed",
+        description: "There was a problem sending your message. Please try again later.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -77,6 +105,7 @@ const ContactCTA = () => {
                     placeholder="Your full name"
                     className="bg-white/10 border-slate-600 text-white placeholder:text-slate-400 focus:border-blue-400"
                     required
+                    disabled={isSubmitting}
                   />
                 </div>
                 
@@ -91,6 +120,7 @@ const ContactCTA = () => {
                     placeholder="your@email.com"
                     className="bg-white/10 border-slate-600 text-white placeholder:text-slate-400 focus:border-blue-400"
                     required
+                    disabled={isSubmitting}
                   />
                 </div>
               </div>
@@ -104,6 +134,7 @@ const ContactCTA = () => {
                   onChange={handleInputChange}
                   placeholder="Your company name"
                   className="bg-white/10 border-slate-600 text-white placeholder:text-slate-400 focus:border-blue-400"
+                  disabled={isSubmitting}
                 />
               </div>
               
@@ -118,14 +149,16 @@ const ContactCTA = () => {
                   rows={4}
                   className="bg-white/10 border-slate-600 text-white placeholder:text-slate-400 focus:border-blue-400"
                   required
+                  disabled={isSubmitting}
                 />
               </div>
               
               <Button 
                 type="submit"
                 className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white py-4 text-lg font-semibold rounded-full transition-all duration-300 hover:scale-105 hover:shadow-xl"
+                disabled={isSubmitting}
               >
-                Start My Automation Journey
+                {isSubmitting ? "Sending..." : "Start My Automation Journey"}
               </Button>
             </form>
           </CardContent>

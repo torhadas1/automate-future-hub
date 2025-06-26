@@ -1,6 +1,6 @@
-
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
+import FeatureShowcase from "@/components/FeatureShowcase";
 import Services from "@/components/Services";
 import BlogPreview from "@/components/BlogPreview";
 import ContactCTA from "@/components/ContactCTA";
@@ -13,6 +13,7 @@ const Index = () => {
       <Hero />
       <div id="services">
         <Services />
+        <FeatureShowcase /> {/* Add the new component here */}
       </div>
       <div id="blog">
         <BlogPreview />

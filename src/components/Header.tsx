@@ -10,7 +10,7 @@ const Header = () => {
   // Helper to handle section navigation
   const navigateToSection = useCallback((sectionId) => {
     setIsMenuOpen(false);
-    
+
     if (location.pathname !== '/') {
       // If not on homepage, go to homepage and then to section
       navigate(`/${sectionId}`);
@@ -37,13 +37,15 @@ const Header = () => {
           <button onClick={() => navigateToSection('#services')} className="text-slate-300 hover:text-blue-400 font-medium transition-colors">Services</button>
           <Link to="/blog" className="text-slate-300 hover:text-blue-400 font-medium transition-colors">Blog</Link>
           <button onClick={() => navigateToSection('#contact')} className="text-slate-300 hover:text-blue-400 font-medium transition-colors">Contact</button>
+          <Link to="/workflows" className="text-slate-300 hover:text-blue-400 font-medium transition-colors">Workflows</Link>
+
         </nav>
 
         <Button className="hidden md:block bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white rounded-full px-6">
           Get Started
         </Button>
 
-        <button 
+        <button
           className="md:hidden w-6 h-6 flex flex-col justify-center items-center"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
