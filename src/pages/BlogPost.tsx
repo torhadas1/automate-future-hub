@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Calendar, ArrowLeft } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 
 type BlogPost = {
   title: string;
@@ -22,73 +22,104 @@ const BlogPost = () => {
   const navigate = useNavigate();
   const [post, setPost] = useState<BlogPost | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   // Fetch blog posts from public directory
   useEffect(() => {
+    let isMounted = true;
+
     const fetchBlogPosts = async () => {
+      if (!slug) {
+        setPost(null);
+        setLoading(false);
+        return;
+      }
+
       try {
-        // For custom domain, use absolute path without BASE_URL
+        setLoading(true);
+        setError(null);
+        
         const response = await fetch('/blogPosts.json');
         if (!response.ok) {
-          throw new Error('Failed to fetch blog posts');
+          throw new Error(`Failed to fetch blog posts: ${response.status}`);
         }
         
         const data: BlogPosts = await response.json();
-        if (slug && data[slug]) {
-          setPost(data[slug]);
-        } else {
-          setPost(null);
+        
+        if (isMounted) {
+          if (data[slug]) {
+            setPost(data[slug]);
+          } else {
+            setPost(null);
+            setError('Blog post not found');
+          }
         }
       } catch (error) {
         console.error('Error loading blog posts:', error);
-        setPost(null);
+        if (isMounted) {
+          setError('Failed to load blog post');
+          setPost(null);
+        }
       } finally {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     };
 
     fetchBlogPosts();
-  }, [slug]);
 
-  // Inject CSS rules for blog content when component mounts
+    return () => {
+      isMounted = false;
+    };
+  }, [slug]); // Only depend on slug
+
+  // Inject CSS rules for blog content - memoize the CSS string
+  const blogContentCSS = useMemo(() => `
+    .blog-content h1, .blog-content h2, .blog-content h3, .blog-content h4 {
+      color: #e0f2fe !important;
+      margin-top: 1.5em;
+      margin-bottom: 0.5em;
+      font-weight: bold;
+    }
+    .blog-content p {
+      color: #bae6fd !important;
+      margin-bottom: 1.25em;
+      line-height: 1.7;
+    }
+    .blog-content ul, .blog-content ol {
+      color: #bae6fd !important;
+      padding-left: 1.5em;
+      margin-bottom: 1.25em;
+    }
+    .blog-content li {
+      color: #bae6fd !important;
+      margin-bottom: 0.5em;
+    }
+    .blog-content strong, .blog-content b {
+      color: #22d3ee !important;
+      font-weight: bold;
+    }
+    .blog-content a {
+      color: #38bdf8 !important;
+      text-decoration: underline;
+    }
+    .blog-content a:hover {
+      color: #0ea5e9 !important;
+    }
+  `, []);
+
   useEffect(() => {
     const styleEl = document.createElement('style');
-    styleEl.textContent = `
-      .blog-content h1, .blog-content h2, .blog-content h3, .blog-content h4 {
-        color: #e0f2fe !important; /* blue-100 */
-        margin-top: 1.5em;
-        margin-bottom: 0.5em;
-        font-weight: bold;
-      }
-      .blog-content p {
-        color: #bae6fd !important; /* blue-200 */
-        margin-bottom: 1.25em;
-        line-height: 1.7;
-      }
-      .blog-content ul, .blog-content ol {
-        color: #bae6fd !important; /* blue-200 */
-        padding-left: 1.5em;
-        margin-bottom: 1.25em;
-      }
-      .blog-content li {
-        color: #bae6fd !important; /* blue-200 */
-        margin-bottom: 0.5em;
-      }
-      .blog-content strong, .blog-content b {
-        color: #22d3ee !important; /* cyan-400 */
-        font-weight: bold;
-      }
-      .blog-content a {
-        color: #38bdf8 !important; /* blue-400 */
-        text-decoration: underline;
-      }
-      .blog-content a:hover {
-        color: #0ea5e9 !important; /* blue-500 */
-      }
-    `;
+    styleEl.textContent = blogContentCSS;
     document.head.appendChild(styleEl);
-    return () => styleEl.remove();
-  }, []);
+    
+    return () => {
+      if (document.head.contains(styleEl)) {
+        document.head.removeChild(styleEl);
+      }
+    };
+  }, [blogContentCSS]); // Depend on memoized CSS
 
   if (loading) {
     return (
@@ -100,11 +131,13 @@ const BlogPost = () => {
     );
   }
 
-  if (!post) {
+  if (error || !post) {
     return (
       <div className="min-h-screen bg-slate-900 flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-4xl font-bold text-white mb-4">Post Not Found</h1>
+          <h1 className="text-4xl font-bold text-white mb-4">
+            {error || 'Post Not Found'}
+          </h1>
           <Button onClick={() => navigate('/blog')} variant="outline">
             Back to Blog
           </Button>

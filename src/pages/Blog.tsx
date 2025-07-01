@@ -5,7 +5,6 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useEffect, useState } from "react";
 
-
 type BlogPost = {
   title: string;
   description: string;
@@ -19,15 +18,20 @@ const Blog = () => {
   const navigate = useNavigate();
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    let isMounted = true; // Add cleanup flag
+
     const fetchBlogPosts = async () => {
       try {
-        // For custom domain, use absolute path without BASE_URL
+        setLoading(true);
+        setError(null);
+        
         const response = await fetch('/blogPosts.json');
         
         if (!response.ok) {
-          throw new Error('Failed to fetch blog posts');
+          throw new Error(`Failed to fetch blog posts: ${response.status}`);
         }
         
         const data = await response.json();
@@ -36,20 +40,32 @@ const Blog = () => {
         const postsArray = Object.entries(data).map(([slug, post]: [string, any]) => ({
           ...post,
           slug,
-          description: post.description || post.content.substring(0, 150).replace(/<\/?[^>]+(>|$)/g, "") + "..."
+          description: post.description || post.content?.substring(0, 150).replace(/<\/?[^>]+(>|$)/g, "") + "..."
         }));
         
-        setBlogPosts(postsArray);
+        if (isMounted) {
+          setBlogPosts(postsArray);
+        }
       } catch (error) {
         console.error('Error loading blog posts:', error);
-        setBlogPosts([]);
+        if (isMounted) {
+          setError('Failed to load blog posts');
+          setBlogPosts([]);
+        }
       } finally {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     };
 
     fetchBlogPosts();
-  }, []);
+
+    // Cleanup function
+    return () => {
+      isMounted = false;
+    };
+  }, []); // Empty dependency array - only run once on mount
 
   const handleBlogClick = (slug: string) => {
     navigate(`/blog/${slug}`);
@@ -62,6 +78,20 @@ const Blog = () => {
         <div className="flex items-center justify-center pt-32">
           <div className="text-center">
             <h1 className="text-2xl font-bold text-white mb-4">Loading blog posts...</h1>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-slate-900">
+        <Header />
+        <div className="flex items-center justify-center pt-32">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold text-white mb-4">Error loading blog posts</h1>
+            <p className="text-slate-300">{error}</p>
           </div>
         </div>
       </div>
@@ -88,9 +118,9 @@ const Blog = () => {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {blogPosts.map((post, index) => (
+            {blogPosts.map((post) => (
               <Card 
-                key={index} 
+                key={post.slug} // Use slug as key instead of index
                 className="group bg-slate-800 border-slate-700 hover:border-blue-500 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg cursor-pointer"
                 onClick={() => handleBlogClick(post.slug)}
               >
