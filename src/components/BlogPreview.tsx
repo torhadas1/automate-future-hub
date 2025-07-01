@@ -21,8 +21,8 @@ const BlogPreview = () => {
   useEffect(() => {
     const fetchBlogPosts = async () => {
       try {
-        const baseUrl = import.meta.env.BASE_URL || '';
-        const response = await fetch(`${baseUrl}/blogPosts.json`);
+        // For custom domain, use absolute path without BASE_URL
+        const response = await fetch('/blogPosts.json');
         
         if (!response.ok) {
           throw new Error('Failed to fetch blog posts');
