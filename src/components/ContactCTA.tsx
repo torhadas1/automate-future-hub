@@ -22,7 +22,7 @@ const ContactCTA = () => {
     
     try {
       // Send data to n8n webhook
-      const response = await fetch('http://localhost:5678/webhook-test/de904770-7228-4f58-92f8-ea69ca258e05', {
+      const response = await fetch('https://n8nb.vps.webdock.cloud/webhook/de904770-7228-4f58-92f8-ea69ca258e05', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
