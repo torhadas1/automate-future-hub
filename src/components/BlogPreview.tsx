@@ -21,20 +21,22 @@ const BlogPreview = () => {
   useEffect(() => {
     const fetchBlogPosts = async () => {
       try {
-        // For custom domain, use absolute path without BASE_URL
         const response = await fetch('/blogPosts.json');
         
         if (!response.ok) {
           throw new Error('Failed to fetch blog posts');
         }
         
-        const data = await response.json();
+        const dataArray = await response.json();
+        
+        // Extract the data from the wrapped structure
+        const data = dataArray[0]?.data || {};
         
         // Convert object to array with slug as a property
         const postsArray = Object.entries(data).map(([slug, post]: [string, any]) => ({
           ...post,
           slug,
-          description: post.description || post.content.substring(0, 150).replace(/<\/?[^>]+(>|$)/g, "") + "..."
+          description: post.description || post.content?.substring(0, 150).replace(/<\/?[^>]+(>|$)/g, "") + "..."
         }));
         
         // Only show the first 3 blog posts in the preview
@@ -95,9 +97,9 @@ const BlogPreview = () => {
         </div>
 
         <div className="grid md:grid-cols-3 gap-8 mb-12">
-          {blogPosts.map((post, index) => (
+          {blogPosts.map((post) => (
             <Card 
-              key={index} 
+              key={post.slug} 
               className="group bg-slate-700 border-slate-600 hover:border-blue-500 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg cursor-pointer"
               onClick={() => handleBlogClick(post.slug)}
             >

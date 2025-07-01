@@ -21,7 +21,7 @@ const Blog = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    let isMounted = true; // Add cleanup flag
+    let isMounted = true;
 
     const fetchBlogPosts = async () => {
       try {
@@ -34,7 +34,10 @@ const Blog = () => {
           throw new Error(`Failed to fetch blog posts: ${response.status}`);
         }
         
-        const data = await response.json();
+        const dataArray = await response.json();
+        
+        // Extract the data from the wrapped structure
+        const data = dataArray[0]?.data || {};
         
         // Convert object to array with slug as a property
         const postsArray = Object.entries(data).map(([slug, post]: [string, any]) => ({
@@ -61,11 +64,10 @@ const Blog = () => {
 
     fetchBlogPosts();
 
-    // Cleanup function
     return () => {
       isMounted = false;
     };
-  }, []); // Empty dependency array - only run once on mount
+  }, []);
 
   const handleBlogClick = (slug: string) => {
     navigate(`/blog/${slug}`);
@@ -120,7 +122,7 @@ const Blog = () => {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {blogPosts.map((post) => (
               <Card 
-                key={post.slug} // Use slug as key instead of index
+                key={post.slug}
                 className="group bg-slate-800 border-slate-700 hover:border-blue-500 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg cursor-pointer"
                 onClick={() => handleBlogClick(post.slug)}
               >

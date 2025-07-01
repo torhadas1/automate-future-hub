@@ -14,6 +14,5 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  // Remove or comment out the base property for custom domains
-  // base: '/automate-future-hub/',
+  // No base property needed for custom domains
 });

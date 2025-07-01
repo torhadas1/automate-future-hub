@@ -13,10 +13,6 @@ type BlogPost = {
   category: string;
 };
 
-type BlogPosts = {
-  [key: string]: BlogPost;
-};
-
 const BlogPost = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
@@ -24,7 +20,6 @@ const BlogPost = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch blog posts from public directory
   useEffect(() => {
     let isMounted = true;
 
@@ -44,7 +39,10 @@ const BlogPost = () => {
           throw new Error(`Failed to fetch blog posts: ${response.status}`);
         }
         
-        const data: BlogPosts = await response.json();
+        const dataArray = await response.json();
+        
+        // Extract the data from the wrapped structure
+        const data = dataArray[0]?.data || {};
         
         if (isMounted) {
           if (data[slug]) {
@@ -72,7 +70,7 @@ const BlogPost = () => {
     return () => {
       isMounted = false;
     };
-  }, [slug]); // Only depend on slug
+  }, [slug]);
 
   // Inject CSS rules for blog content - memoize the CSS string
   const blogContentCSS = useMemo(() => `
@@ -107,6 +105,21 @@ const BlogPost = () => {
     .blog-content a:hover {
       color: #0ea5e9 !important;
     }
+    .blog-content pre {
+      background: #1e293b !important;
+      color: #e2e8f0 !important;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      overflow-x: auto;
+      margin: 1.5em 0;
+    }
+    .blog-content code {
+      background: #334155 !important;
+      color: #e2e8f0 !important;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.25rem;
+      font-size: 0.875em;
+    }
   `, []);
 
   useEffect(() => {
@@ -119,7 +132,7 @@ const BlogPost = () => {
         document.head.removeChild(styleEl);
       }
     };
-  }, [blogContentCSS]); // Depend on memoized CSS
+  }, [blogContentCSS]);
 
   if (loading) {
     return (
