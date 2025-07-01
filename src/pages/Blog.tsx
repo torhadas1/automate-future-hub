@@ -1,46 +1,71 @@
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calendar, ArrowUp } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { useEffect, useState } from "react";
+
+type BlogPost = {
+  title: string;
+  description: string;
+  date: string;
+  readTime: string;
+  category: string;
+  slug: string;
+};
 
 const Blog = () => {
   const navigate = useNavigate();
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const blogPosts = [
-    {
-      id: 1,
-      title: "Building Advanced CRM Automation with n8n and AI",
-      description: "Learn how to create intelligent customer relationship workflows that automatically qualify leads, send personalized messages, and update your CRM in real-time.",
-      date: "December 20, 2024",
-      readTime: "8 min read",
-      category: "Business Automation",
-      slug: "building-advanced-crm-automation"
-    },
-    {
-      id: 2,
-      title: "Financial Data Processing: From Chaos to Clarity",
-      description: "Discover how to automate invoice processing, expense categorization, and financial reporting using n8n workflows with OCR and AI integration.",
-      date: "December 18, 2024",
-      readTime: "12 min read",
-      category: "Finance",
-      slug: "financial-data-processing"
-    },
-    {
-      id: 3,
-      title: "Multi-Channel Marketing Automation Made Simple",
-      description: "Create sophisticated marketing campaigns that span email, social media, and SMS with personalized content generation and automated scheduling.",
-      date: "December 15, 2024",
-      readTime: "10 min read",
-      category: "Marketing",
-      slug: "multi-channel-marketing-automation"
-    }
-  ];
+  useEffect(() => {
+    const fetchBlogPosts = async () => {
+      try {
+        const baseUrl = import.meta.env.BASE_URL || '';
+        const response = await fetch(`${baseUrl}/blogPosts.json`);
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch blog posts');
+        }
+        
+        const data = await response.json();
+        
+        // Convert object to array with slug as a property
+        const postsArray = Object.entries(data).map(([slug, post]: [string, any]) => ({
+          ...post,
+          slug,
+          description: post.description || post.content.substring(0, 150).replace(/<\/?[^>]+(>|$)/g, "") + "..."
+        }));
+        
+        setBlogPosts(postsArray);
+      } catch (error) {
+        console.error('Error loading blog posts:', error);
+        setBlogPosts([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBlogPosts();
+  }, []);
 
   const handleBlogClick = (slug: string) => {
     navigate(`/blog/${slug}`);
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-slate-900">
+        <Header />
+        <div className="flex items-center justify-center pt-32">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold text-white mb-4">Loading blog posts...</h1>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-slate-900">

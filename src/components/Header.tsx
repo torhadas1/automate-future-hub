@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useState, useCallback } from "react";
-import { useNavigate, Link, useLocation } from "react-router-dom"; // <-- Added useLocation
+import { useNavigate, Link, useLocation } from "react-router-dom";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -20,6 +20,12 @@ const Header = () => {
     }
   }, [location.pathname, navigate]);
 
+  // Handle "Get Started" button click
+  const handleGetStarted = () => {
+    setIsMenuOpen(false); // Close mobile menu if open
+    navigateToSection('#contact'); // Navigate to contact section
+  };
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-slate-900/90 backdrop-blur-lg border-b border-slate-700">
       <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
@@ -38,10 +44,12 @@ const Header = () => {
           <Link to="/blog" className="text-slate-300 hover:text-blue-400 font-medium transition-colors">Blog</Link>
           <button onClick={() => navigateToSection('#contact')} className="text-slate-300 hover:text-blue-400 font-medium transition-colors">Contact</button>
           <Link to="/workflows" className="text-slate-300 hover:text-blue-400 font-medium transition-colors">Workflows</Link>
-
         </nav>
 
-        <Button className="hidden md:block bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white rounded-full px-6">
+        <Button 
+          onClick={handleGetStarted}
+          className="hidden md:block bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white rounded-full px-6"
+        >
           Get Started
         </Button>
 
@@ -61,7 +69,10 @@ const Header = () => {
             <button onClick={() => navigateToSection('#services')} className="block w-full text-left text-slate-300 hover:text-blue-400 font-medium">Services</button>
             <Link to="/blog" className="block text-slate-300 hover:text-blue-400 font-medium" onClick={() => setIsMenuOpen(false)}>Blog</Link>
             <button onClick={() => navigateToSection('#contact')} className="block w-full text-left text-slate-300 hover:text-blue-400 font-medium">Contact</button>
-            <Button className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white rounded-full">
+            <Button 
+              onClick={handleGetStarted}
+              className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white rounded-full"
+            >
               Get Started
             </Button>
           </nav>

@@ -1,8 +1,20 @@
-
 import { Button } from "@/components/ui/button";
 import { ArrowDown } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Hero = () => {
+  const navigate = useNavigate();
+
+  const scrollToContact = () => {
+    // Scroll to the contact section
+    document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const navigateToBlog = () => {
+    // Navigate to the blog page
+    navigate('/blog');
+  };
+
   return (
     <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 overflow-hidden pt-16">
       {/* Background Effects */}
@@ -27,6 +39,7 @@ const Hero = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
             <Button 
               size="lg" 
+              onClick={scrollToContact}
               className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white px-8 py-4 text-lg font-semibold rounded-full transition-all duration-300 hover:scale-105 hover:shadow-2xl"
             >
               Get Started Today
@@ -34,6 +47,7 @@ const Hero = () => {
             <Button 
               variant="outline" 
               size="lg"
+              onClick={navigateToBlog}
               className="border-slate-400 text-slate-300 hover:bg-slate-800 px-8 py-4 text-lg rounded-full transition-all duration-300 hover:scale-105"
             >
               View Our Work

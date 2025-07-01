@@ -2,39 +2,53 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Calendar, ArrowUp } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+
+type BlogPost = {
+  title: string;
+  description: string;
+  date: string;
+  readTime: string;
+  category: string;
+  slug: string;
+};
 
 const BlogPreview = () => {
   const navigate = useNavigate();
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const blogPosts = [
-    {
-      id: 1,
-      title: "Building Advanced CRM Automation with n8n and AI",
-      description: "Learn how to create intelligent customer relationship workflows that automatically qualify leads, send personalized messages, and update your CRM in real-time.",
-      date: "December 20, 2024",
-      readTime: "8 min read",
-      category: "Business Automation",
-      slug: "building-advanced-crm-automation"
-    },
-    {
-      id: 2,
-      title: "Financial Data Processing: From Chaos to Clarity",
-      description: "Discover how to automate invoice processing, expense categorization, and financial reporting using n8n workflows with OCR and AI integration.",
-      date: "December 18, 2024",
-      readTime: "12 min read",
-      category: "Finance",
-      slug: "financial-data-processing"
-    },
-    {
-      id: 3,
-      title: "Multi-Channel Marketing Automation Made Simple",
-      description: "Create sophisticated marketing campaigns that span email, social media, and SMS with personalized content generation and automated scheduling.",
-      date: "December 15, 2024",
-      readTime: "10 min read",
-      category: "Marketing",
-      slug: "multi-channel-marketing-automation"
-    }
-  ];
+  useEffect(() => {
+    const fetchBlogPosts = async () => {
+      try {
+        const baseUrl = import.meta.env.BASE_URL || '';
+        const response = await fetch(`${baseUrl}/blogPosts.json`);
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch blog posts');
+        }
+        
+        const data = await response.json();
+        
+        // Convert object to array with slug as a property
+        const postsArray = Object.entries(data).map(([slug, post]: [string, any]) => ({
+          ...post,
+          slug,
+          description: post.description || post.content.substring(0, 150).replace(/<\/?[^>]+(>|$)/g, "") + "..."
+        }));
+        
+        // Only show the first 3 blog posts in the preview
+        setBlogPosts(postsArray.slice(0, 3));
+      } catch (error) {
+        console.error('Error loading blog posts:', error);
+        setBlogPosts([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBlogPosts();
+  }, []);
 
   const handleBlogClick = (slug: string) => {
     navigate(`/blog/${slug}`);
@@ -43,6 +57,26 @@ const BlogPreview = () => {
   const handleViewAll = () => {
     navigate('/blog');
   };
+
+  if (loading) {
+    return (
+      <section className="py-20 bg-slate-800 relative">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center">
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+              Latest from Our
+              <span className="block bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                Automation Blog
+              </span>
+            </h2>
+            <p className="text-xl text-slate-300 max-w-3xl mx-auto mb-8">
+              Loading blog posts...
+            </p>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="py-20 bg-slate-800 relative">

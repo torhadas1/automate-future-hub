@@ -1,6 +1,7 @@
 {
   "building-advanced-crm-automation": {
     "title": "Building Advanced CRM Automation with n8n and AI",
+    "description": "Learn how to create intelligent customer relationship workflows that automatically qualify leads, send personalized messages, and update your CRM in real-time.",
     "content": "<h2>Introduction</h2><p>Customer Relationship Management (CRM) automation has revolutionized how businesses interact with their customers. By leveraging n8n and AI integration, you can create intelligent workflows that not only automate repetitive tasks but also make smart decisions based on customer data.</p><h2>Setting Up Your n8n Workflow</h2><p>First, let's establish the foundation of our CRM automation workflow. We'll start by connecting to your CRM system using n8n's extensive library of integrations.</p><h3>Required Nodes:</h3><ul><li>CRM Trigger (Webhook or Polling)</li><li>AI Classification Node</li><li>Decision Node</li><li>Email/SMS Notification Nodes</li><li>CRM Update Node</li></ul><h2>AI Integration for Lead Qualification</h2><p>The power of this automation lies in its ability to intelligently qualify leads using AI. We'll implement a scoring system that analyzes various data points to determine lead quality.</p><h2>Implementation Steps</h2><p>Follow these detailed steps to implement your own CRM automation workflow...</p>",
     "date": "December 20, 2024",
     "readTime": "8 min read",
@@ -8,6 +9,7 @@
   },
   "financial-data-processing": {
     "title": "Financial Data Processing: From Chaos to Clarity",
+    "description": "Discover how to automate invoice processing, expense categorization, and financial reporting using n8n workflows with OCR and AI integration.",
     "content": "<h2>The Challenge of Financial Data</h2><p>Modern businesses deal with massive amounts of financial data from various sources. Without proper automation, this can quickly become overwhelming and error-prone.</p><h2>n8n Workflow Architecture</h2><p>Our financial automation workflow is designed to handle multiple data sources and process them through intelligent categorization and validation systems.</p><h2>OCR Integration</h2><p>Using OCR technology, we can automatically extract data from invoices, receipts, and other financial documents, eliminating manual data entry.</p>",
     "date": "December 18, 2024",
     "readTime": "12 min read",
