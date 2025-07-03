@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Calendar, ArrowLeft, Clock, Download } from "lucide-react";
+import { Calendar, ArrowLeft, Clock, ExternalLink } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useEffect, useState, useMemo } from "react";
@@ -12,6 +12,7 @@ type Template = {
   readTime: string;
   category: string;
   image: string;
+  link: string;
 };
 
 const TemplatePost = () => {
@@ -120,6 +121,12 @@ const TemplatePost = () => {
     };
   }, [templateContentCSS]);
 
+  const handleViewTemplate = () => {
+    if (template?.link) {
+      window.open(template.link, '_blank', 'noopener,noreferrer');
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-slate-900 flex items-center justify-center">
@@ -162,7 +169,7 @@ const TemplatePost = () => {
 
           <article className="bg-slate-700 rounded-lg overflow-hidden border border-slate-600">
             {template.image && (
-              <div className="h-64 bg-slate-800 overflow-hidden">
+              <div className="bg-slate-800 overflow-hidden">
                 <img 
                   src={template.image} 
                   alt={template.title}
@@ -194,9 +201,12 @@ const TemplatePost = () => {
               </div>
 
               <div className="mb-8">
-                <Button className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white">
-                  <Download className="w-4 h-4 mr-2" />
-                  Download Template
+                <Button 
+                  onClick={handleViewTemplate}
+                  className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white"
+                >
+                  <ExternalLink className="w-4 h-4 mr-2" />
+                  View Template
                 </Button>
               </div>
 
