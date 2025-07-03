@@ -8,22 +8,45 @@ const Header = () => {
   const location = useLocation();
 
   // Helper to handle section navigation
-  const navigateToSection = useCallback((sectionId) => {
+  const navigateToSection = useCallback((sectionId: string) => {
     setIsMenuOpen(false);
 
     if (location.pathname !== '/') {
-      // If not on homepage, go to homepage and then to section
-      navigate(`/${sectionId}`);
+      // If not on homepage, go to homepage first, then scroll to section
+      navigate('/');
+      // Use setTimeout to ensure navigation completes before scrolling
+      setTimeout(() => {
+        const element = document.querySelector(sectionId);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
     } else {
       // Already on homepage, just scroll to section
-      document.querySelector(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+      const element = document.querySelector(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
     }
   }, [location.pathname, navigate]);
 
+  // Handle logo click
+  const handleLogoClick = () => {
+    setIsMenuOpen(false);
+    
+    if (location.pathname !== '/') {
+      // If not on homepage, navigate to homepage
+      navigate('/');
+    } else {
+      // Already on homepage, scroll to top
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
   // Handle "Get Started" button click
   const handleGetStarted = () => {
-    setIsMenuOpen(false); // Close mobile menu if open
-    navigateToSection('#contact'); // Navigate to contact section
+    setIsMenuOpen(false);
+    navigateToSection('#contact');
   };
 
   return (
@@ -31,7 +54,7 @@ const Header = () => {
       <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
         <div
           className="flex items-center space-x-2 cursor-pointer"
-          onClick={() => navigate('/')}
+          onClick={handleLogoClick}
         >
           <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg flex items-center justify-center">
             <span className="text-white font-bold text-sm">B</span>
@@ -40,10 +63,30 @@ const Header = () => {
         </div>
 
         <nav className="hidden md:flex items-center space-x-8">
-          <button onClick={() => navigateToSection('#services')} className="text-slate-300 hover:text-blue-400 font-medium transition-colors">Services</button>
-          <Link to="/templates" className="text-slate-300 hover:text-blue-400 font-medium transition-colors">Templates</Link>
-          <Link to="/blog" className="text-slate-300 hover:text-blue-400 font-medium transition-colors">Blog</Link>
-          <button onClick={() => navigateToSection('#contact')} className="text-slate-300 hover:text-blue-400 font-medium transition-colors">Contact</button>
+          <button 
+            onClick={() => navigateToSection('#services')} 
+            className="text-slate-300 hover:text-blue-400 font-medium transition-colors"
+          >
+            Services
+          </button>
+          <Link 
+            to="/templates" 
+            className="text-slate-300 hover:text-blue-400 font-medium transition-colors"
+          >
+            Templates
+          </Link>
+          <Link 
+            to="/blog" 
+            className="text-slate-300 hover:text-blue-400 font-medium transition-colors"
+          >
+            Blog
+          </Link>
+          <button 
+            onClick={() => navigateToSection('#contact')} 
+            className="text-slate-300 hover:text-blue-400 font-medium transition-colors"
+          >
+            Contact
+          </button>
         </nav>
 
         <Button 
@@ -66,10 +109,32 @@ const Header = () => {
       {isMenuOpen && (
         <div className="md:hidden bg-slate-800 border-t border-slate-700">
           <nav className="px-6 py-4 space-y-4">
-            <button onClick={() => navigateToSection('#services')} className="block w-full text-left text-slate-300 hover:text-blue-400 font-medium">Services</button>
-            <Link to="/templates" className="block text-slate-300 hover:text-blue-400 font-medium" onClick={() => setIsMenuOpen(false)}>Templates</Link>
-            <Link to="/blog" className="block text-slate-300 hover:text-blue-400 font-medium" onClick={() => setIsMenuOpen(false)}>Blog</Link>
-            <button onClick={() => navigateToSection('#contact')} className="block w-full text-left text-slate-300 hover:text-blue-400 font-medium">Contact</button>
+            <button 
+              onClick={() => navigateToSection('#services')} 
+              className="block w-full text-left text-slate-300 hover:text-blue-400 font-medium"
+            >
+              Services
+            </button>
+            <Link 
+              to="/templates" 
+              className="block text-slate-300 hover:text-blue-400 font-medium" 
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Templates
+            </Link>
+            <Link 
+              to="/blog" 
+              className="block text-slate-300 hover:text-blue-400 font-medium" 
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Blog
+            </Link>
+            <button 
+              onClick={() => navigateToSection('#contact')} 
+              className="block w-full text-left text-slate-300 hover:text-blue-400 font-medium"
+            >
+              Contact
+            </button>
             <Button 
               onClick={handleGetStarted}
               className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white rounded-full"

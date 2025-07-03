@@ -8,8 +8,8 @@
                 "date": "June 28, 2025",
                 "readTime": "5 min setup",
                 "category": "Sales & CRM",
-                "image": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=200&fit=crop&crop=center"
-
+                "image": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=200&fit=crop&crop=center",
+                "link": "https://n8n.io/workflows/lead-qualification-crm"
             },
             "e-commerce-order-fulfillment": {
                 "title": "E-commerce Order Fulfillment Automation",
@@ -18,8 +18,8 @@
                 "date": "June 25, 2025",
                 "readTime": "8 min setup",
                 "category": "E-commerce",
-                "image": "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400&h=200&fit=crop&crop=center"
-
+                "image": "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400&h=200&fit=crop&crop=center",
+                "link": "https://n8n.io/workflows/ecommerce-order-fulfillment"
             },
             "social-media-content-scheduler": {
                 "title": "Social Media Content Scheduler",
@@ -28,8 +28,8 @@
                 "date": "June 22, 2025",
                 "readTime": "6 min setup",
                 "category": "Marketing",
-                "image": "https://images.unsplash.com/photo-1611926653458-09294b3142bf?w=400&h=200&fit=crop&crop=center"
-
+                "image": "https://images.unsplash.com/photo-1611926653458-09294b3142bf?w=400&h=200&fit=crop&crop=center",
+                "link": "https://n8n.io/workflows/social-media-scheduler"
             }
         }
     }
