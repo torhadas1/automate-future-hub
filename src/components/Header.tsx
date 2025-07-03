@@ -41,9 +41,9 @@ const Header = () => {
 
         <nav className="hidden md:flex items-center space-x-8">
           <button onClick={() => navigateToSection('#services')} className="text-slate-300 hover:text-blue-400 font-medium transition-colors">Services</button>
+          <Link to="/templates" className="text-slate-300 hover:text-blue-400 font-medium transition-colors">Templates</Link>
           <Link to="/blog" className="text-slate-300 hover:text-blue-400 font-medium transition-colors">Blog</Link>
           <button onClick={() => navigateToSection('#contact')} className="text-slate-300 hover:text-blue-400 font-medium transition-colors">Contact</button>
-          <Link to="/workflows" className="text-slate-300 hover:text-blue-400 font-medium transition-colors">Workflows</Link>
         </nav>
 
         <Button 
@@ -67,6 +67,7 @@ const Header = () => {
         <div className="md:hidden bg-slate-800 border-t border-slate-700">
           <nav className="px-6 py-4 space-y-4">
             <button onClick={() => navigateToSection('#services')} className="block w-full text-left text-slate-300 hover:text-blue-400 font-medium">Services</button>
+            <Link to="/templates" className="block text-slate-300 hover:text-blue-400 font-medium" onClick={() => setIsMenuOpen(false)}>Templates</Link>
             <Link to="/blog" className="block text-slate-300 hover:text-blue-400 font-medium" onClick={() => setIsMenuOpen(false)}>Blog</Link>
             <button onClick={() => navigateToSection('#contact')} className="block w-full text-left text-slate-300 hover:text-blue-400 font-medium">Contact</button>
             <Button 

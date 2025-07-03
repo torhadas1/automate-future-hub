@@ -39,8 +39,15 @@ const BlogPreview = () => {
           description: post.description || post.content?.substring(0, 150).replace(/<\/?[^>]+(>|$)/g, "") + "..."
         }));
         
+        // Sort by date (newest first)
+        const sortedPosts = postsArray.sort((a, b) => {
+          const dateA = new Date(a.date);
+          const dateB = new Date(b.date);
+          return dateB.getTime() - dateA.getTime();
+        });
+        
         // Only show the first 3 blog posts in the preview
-        setBlogPosts(postsArray.slice(0, 3));
+        setBlogPosts(sortedPosts.slice(0, 3));
       } catch (error) {
         console.error('Error loading blog posts:', error);
         setBlogPosts([]);
