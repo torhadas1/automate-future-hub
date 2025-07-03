@@ -1,0 +1,36 @@
+[
+    {
+        "data": {
+            "lead-qualification-crm-automation": {
+                "title": "Lead Qualification & CRM Automation",
+                "description": "Automatically qualify leads based on predefined criteria, score them using AI, and update your CRM with enriched contact information.",
+                "content": "<h2>Template Overview</h2><p>This n8n template automates the entire lead qualification process, from initial contact capture to CRM updates. It uses AI to score leads based on multiple criteria and automatically routes qualified leads to your sales team.</p><h2>Key Features</h2><ul><li>Automatic lead scoring using AI analysis</li><li>CRM integration with HubSpot, Salesforce, or Pipedrive</li><li>Email notifications to sales team</li><li>Lead enrichment with company data</li><li>Customizable qualification criteria</li></ul><h2>Required Nodes</h2><ul><li>Webhook Trigger</li><li>AI Lead Scoring Node</li><li>CRM Connector</li><li>Email Notification</li><li>Data Enrichment API</li></ul><h2>Setup Instructions</h2><p>1. Configure your CRM connection credentials<br>2. Set up the webhook URL in your lead capture forms<br>3. Customize the AI scoring parameters<br>4. Test the workflow with sample data</p><h2>Use Cases</h2><p>Perfect for sales teams who want to automate lead qualification and ensure no potential customer falls through the cracks.</p>",
+                "date": "June 28, 2025",
+                "readTime": "5 min setup",
+                "category": "Sales & CRM",
+                "image": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=200&fit=crop&crop=center"
+
+            },
+            "e-commerce-order-fulfillment": {
+                "title": "E-commerce Order Fulfillment Automation",
+                "description": "Streamline your e-commerce operations with automated order processing, inventory updates, and customer notifications.",
+                "content": "<h2>Template Overview</h2><p>This comprehensive e-commerce automation template handles the entire order fulfillment process from order placement to shipping notifications. It integrates with popular e-commerce platforms and shipping providers.</p><h2>Key Features</h2><ul><li>Automatic order processing from multiple channels</li><li>Real-time inventory management</li><li>Shipping label generation</li><li>Customer notification emails</li><li>Order tracking updates</li><li>Low stock alerts</li></ul><h2>Required Nodes</h2><ul><li>E-commerce Platform Trigger (Shopify, WooCommerce, etc.)</li><li>Inventory Management</li><li>Shipping API Integration</li><li>Email Notification System</li><li>Database Updates</li></ul><h2>Setup Instructions</h2><p>1. Connect your e-commerce platform API<br>2. Configure shipping provider credentials<br>3. Set up inventory tracking database<br>4. Customize notification templates<br>5. Test with sample orders</p><h2>Use Cases</h2><p>Ideal for online retailers who want to automate their order fulfillment process and provide excellent customer service.</p>",
+                "date": "June 25, 2025",
+                "readTime": "8 min setup",
+                "category": "E-commerce",
+                "image": "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400&h=200&fit=crop&crop=center"
+
+            },
+            "social-media-content-scheduler": {
+                "title": "Social Media Content Scheduler",
+                "description": "Automate your social media presence with scheduled posts, content curation, and engagement tracking across multiple platforms.",
+                "content": "<h2>Template Overview</h2><p>This social media automation template helps you maintain a consistent online presence by scheduling content across multiple platforms, curating relevant content, and tracking engagement metrics.</p><h2>Key Features</h2><ul><li>Multi-platform posting (Twitter, LinkedIn, Facebook, Instagram)</li><li>Content scheduling and queuing</li><li>Automatic content curation from RSS feeds</li><li>Engagement tracking and analytics</li><li>Hashtag optimization</li><li>Content approval workflow</li></ul><h2>Required Nodes</h2><ul><li>Schedule Trigger</li><li>Social Media Platform APIs</li><li>Content Management System</li><li>RSS Feed Reader</li><li>Analytics Collector</li></ul><h2>Setup Instructions</h2><p>1. Connect your social media accounts<br>2. Set up content scheduling parameters<br>3. Configure RSS feeds for content curation<br>4. Customize posting templates<br>5. Set up analytics tracking</p><h2>Use Cases</h2><p>Perfect for marketing teams, content creators, and businesses who want to maintain an active social media presence without manual effort.</p>",
+                "date": "June 22, 2025",
+                "readTime": "6 min setup",
+                "category": "Marketing",
+                "image": "https://images.unsplash.com/photo-1611926653458-09294b3142bf?w=400&h=200&fit=crop&crop=center"
+
+            }
+        }
+    }
+]
