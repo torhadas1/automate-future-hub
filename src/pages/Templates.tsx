@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useEffect, useState } from "react";
+import { trackEvent } from "@/utils/analytics";
 
 type Template = {
   title: string;
@@ -56,12 +57,14 @@ const Templates = () => {
         
         if (isMounted) {
           setTemplates(sortedTemplates);
+          trackEvent('templates_loaded', { count: sortedTemplates.length });
         }
       } catch (error) {
         console.error('Error loading templates:', error);
         if (isMounted) {
           setError('Failed to load templates');
           setTemplates([]);
+          trackEvent('templates_error', { error: (error as Error).message });
         }
       } finally {
         if (isMounted) {
@@ -78,6 +81,10 @@ const Templates = () => {
   }, []);
 
   const handleTemplateClick = (slug: string) => {
+    trackEvent('template_click', { 
+      template_slug: slug,
+      template_title: templates.find(template => template.slug === slug)?.title
+    });
     navigate(`/templates/${slug}`);
   };
 

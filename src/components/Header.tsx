@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { useState, useCallback } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
+import { trackEvent } from "@/utils/analytics";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -11,10 +12,16 @@ const Header = () => {
   const navigateToSection = useCallback((sectionId: string) => {
     setIsMenuOpen(false);
 
+    // Track navigation event
+    trackEvent('navigation_click', { 
+      section: sectionId,
+      from_page: location.pathname 
+    });
+
     if (location.pathname !== '/') {
       // If not on homepage, go to homepage first, then scroll to section
       navigate('/');
-      // Use setTimeout to ensure navigation completes before scrolling
+      // Add a small delay to ensure the page loads before scrolling
       setTimeout(() => {
         const element = document.querySelector(sectionId);
         if (element) {
@@ -34,6 +41,10 @@ const Header = () => {
   const handleLogoClick = () => {
     setIsMenuOpen(false);
     
+    trackEvent('logo_click', { 
+      from_page: location.pathname 
+    });
+    
     if (location.pathname !== '/') {
       // If not on homepage, navigate to homepage
       navigate('/');
@@ -46,6 +57,11 @@ const Header = () => {
   // Handle "Get Started" button click
   const handleGetStarted = () => {
     setIsMenuOpen(false);
+    
+    trackEvent('get_started_click', { 
+      from_page: location.pathname 
+    });
+    
     navigateToSection('#contact');
   };
 
@@ -72,12 +88,14 @@ const Header = () => {
           <Link 
             to="/templates" 
             className="text-slate-300 hover:text-blue-400 font-medium transition-colors"
+            onClick={() => trackEvent('navigation_click', { destination: 'templates' })}
           >
             Templates
           </Link>
           <Link 
             to="/blog" 
             className="text-slate-300 hover:text-blue-400 font-medium transition-colors"
+            onClick={() => trackEvent('navigation_click', { destination: 'blog' })}
           >
             Blog
           </Link>
@@ -98,7 +116,10 @@ const Header = () => {
 
         <button
           className="md:hidden w-6 h-6 flex flex-col justify-center items-center"
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          onClick={() => {
+            setIsMenuOpen(!isMenuOpen);
+            trackEvent('mobile_menu_toggle', { action: isMenuOpen ? 'close' : 'open' });
+          }}
         >
           <span className={`w-full h-0.5 bg-slate-300 transition-transform ${isMenuOpen ? 'rotate-45 translate-y-1' : ''}`}></span>
           <span className={`w-full h-0.5 bg-slate-300 mt-1 transition-opacity ${isMenuOpen ? 'opacity-0' : ''}`}></span>
@@ -118,14 +139,26 @@ const Header = () => {
             <Link 
               to="/templates" 
               className="block text-slate-300 hover:text-blue-400 font-medium" 
-              onClick={() => setIsMenuOpen(false)}
+              onClick={() => {
+                setIsMenuOpen(false);
+                trackEvent('navigation_click', { 
+                  destination: 'templates',
+                  from: 'mobile_menu'
+                });
+              }}
             >
               Templates
             </Link>
             <Link 
               to="/blog" 
               className="block text-slate-300 hover:text-blue-400 font-medium" 
-              onClick={() => setIsMenuOpen(false)}
+              onClick={() => {
+                setIsMenuOpen(false);
+                trackEvent('navigation_click', { 
+                  destination: 'blog',
+                  from: 'mobile_menu'
+                });
+              }}
             >
               Blog
             </Link>

@@ -1,9 +1,10 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Calendar, ArrowLeft } from "lucide-react";
+import { Calendar, ArrowLeft, Clock, Tag } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useEffect, useState, useMemo } from "react";
+import { trackEvent } from "@/utils/analytics";
 
 type BlogPost = {
   title: string;
@@ -47,9 +48,15 @@ const BlogPost = () => {
         if (isMounted) {
           if (data[slug]) {
             setPost(data[slug]);
+            trackEvent('blog_post_view', { 
+              post_slug: slug,
+              post_title: data[slug].title,
+              post_category: data[slug].category
+            });
           } else {
             setPost(null);
             setError('Blog post not found');
+            trackEvent('blog_post_not_found', { post_slug: slug });
           }
         }
       } catch (error) {
@@ -166,7 +173,12 @@ const BlogPost = () => {
       <main className="pt-20 pb-20">
         <div className="max-w-4xl mx-auto px-6">
           <Button 
-            onClick={() => navigate('/blog')} 
+            onClick={() => {
+              trackEvent('back_to_blog_click', {
+                from_post: slug
+              });
+              navigate('/blog');
+            }} 
             variant="outline" 
             className="mb-8"
           >

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useEffect, useState } from "react";
+import { trackEvent } from "@/utils/analytics";
 
 type BlogPost = {
   title: string;
@@ -55,12 +56,14 @@ const Blog = () => {
         
         if (isMounted) {
           setBlogPosts(sortedPosts);
+          trackEvent('blog_posts_loaded', { count: sortedPosts.length });
         }
       } catch (error) {
         console.error('Error loading blog posts:', error);
         if (isMounted) {
           setError('Failed to load blog posts');
           setBlogPosts([]);
+          trackEvent('blog_posts_error', { error: (error as Error).message });
         }
       } finally {
         if (isMounted) {
@@ -77,6 +80,10 @@ const Blog = () => {
   }, []);
 
   const handleBlogClick = (slug: string) => {
+    trackEvent('blog_post_click', { 
+      post_slug: slug,
+      post_title: blogPosts.find(post => post.slug === slug)?.title
+    });
     navigate(`/blog/${slug}`);
   };
 

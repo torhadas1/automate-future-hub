@@ -4,6 +4,7 @@ import { Calendar, ArrowLeft, Clock, ExternalLink } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useEffect, useState, useMemo } from "react";
+import { trackEvent } from "@/utils/analytics";
 
 type Template = {
   title: string;
@@ -49,9 +50,15 @@ const TemplatePost = () => {
         if (isMounted) {
           if (data[slug]) {
             setTemplate(data[slug]);
+            trackEvent('template_view', { 
+              template_slug: slug,
+              template_title: data[slug].title,
+              template_category: data[slug].category
+            });
           } else {
             setTemplate(null);
             setError('Template not found');
+            trackEvent('template_not_found', { template_slug: slug });
           }
         }
       } catch (error) {
@@ -123,6 +130,11 @@ const TemplatePost = () => {
 
   const handleViewTemplate = () => {
     if (template?.link) {
+      trackEvent('template_link_click', { 
+        template_slug: slug,
+        template_title: template.title,
+        template_link: template.link
+      });
       window.open(template.link, '_blank', 'noopener,noreferrer');
     }
   };
@@ -159,7 +171,12 @@ const TemplatePost = () => {
       <main className="pt-20 pb-20">
         <div className="max-w-4xl mx-auto px-6">
           <Button 
-            onClick={() => navigate('/templates')} 
+            onClick={() => {
+              trackEvent('back_to_templates_click', {
+                from_template: slug
+              });
+              navigate('/templates');
+            }} 
             variant="outline" 
             className="mb-8"
           >

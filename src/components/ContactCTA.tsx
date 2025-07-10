@@ -5,6 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { trackEvent } from "@/utils/analytics";
 
 const ContactCTA = () => {
   const [formData, setFormData] = useState({
@@ -20,6 +21,15 @@ const ContactCTA = () => {
     e.preventDefault();
     setIsSubmitting(true);
     
+    // Track form submission attempt with anonymized data for privacy
+    trackEvent('contact_form_submit_attempt', { 
+      has_name: !!formData.name.trim(),
+      has_email: !!formData.email.trim(),
+      has_company: !!formData.company.trim(),
+      message_length: formData.message.length,
+      form_type: 'contact_cta'
+    });
+    
     try {
       // Send data to n8n webhook
       const response = await fetch('https://n8nb.vps.webdock.cloud/webhook/de904770-7228-4f58-92f8-ea69ca258e05', {
@@ -34,6 +44,11 @@ const ContactCTA = () => {
         throw new Error('Failed to submit form');
       }
       
+      // Track successful submission
+      trackEvent('contact_form_submit_success', {
+        form_type: 'contact_cta'
+      });
+      
       // Success message
       toast({
         title: "Message Sent!",
@@ -44,6 +59,12 @@ const ContactCTA = () => {
       setFormData({ name: "", email: "", company: "", message: "" });
     } catch (error) {
       console.error('Error submitting form:', error);
+      
+      // Track submission error
+      trackEvent('contact_form_submit_error', { 
+        error: (error as Error).message,
+        form_type: 'contact_cta'
+      });
       
       // Error message
       toast({
@@ -57,14 +78,26 @@ const ContactCTA = () => {
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    
+    // Track field interactions for fields longer than 5 characters
+    // This helps understand which fields users are engaging with
+    if (value.length > 5 && value.length % 10 === 0) {
+      trackEvent('contact_form_field_interaction', {
+        field: name,
+        length: Math.floor(value.length / 10) * 10, // Round to nearest 10 for privacy
+        form_type: 'contact_cta'
+      });
+    }
+    
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [name]: value
     });
   };
 
   return (
-    <section className="py-20 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 relative">
+    <section id="contact" className="py-20 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 relative">
       {/* Background Effects */}
       <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
       <div className="absolute top-10 left-10 w-64 h-64 bg-blue-500/20 rounded-full blur-3xl"></div>
@@ -106,6 +139,7 @@ const ContactCTA = () => {
                     className="bg-white/10 border-slate-600 text-white placeholder:text-slate-400 focus:border-blue-400"
                     required
                     disabled={isSubmitting}
+                    onFocus={() => trackEvent('contact_form_field_focus', { field: 'name', form_type: 'contact_cta' })}
                   />
                 </div>
                 
@@ -121,6 +155,7 @@ const ContactCTA = () => {
                     className="bg-white/10 border-slate-600 text-white placeholder:text-slate-400 focus:border-blue-400"
                     required
                     disabled={isSubmitting}
+                    onFocus={() => trackEvent('contact_form_field_focus', { field: 'email', form_type: 'contact_cta' })}
                   />
                 </div>
               </div>
@@ -135,6 +170,7 @@ const ContactCTA = () => {
                   placeholder="Your company name"
                   className="bg-white/10 border-slate-600 text-white placeholder:text-slate-400 focus:border-blue-400"
                   disabled={isSubmitting}
+                  onFocus={() => trackEvent('contact_form_field_focus', { field: 'company', form_type: 'contact_cta' })}
                 />
               </div>
               
@@ -150,6 +186,7 @@ const ContactCTA = () => {
                   className="bg-white/10 border-slate-600 text-white placeholder:text-slate-400 focus:border-blue-400"
                   required
                   disabled={isSubmitting}
+                  onFocus={() => trackEvent('contact_form_field_focus', { field: 'message', form_type: 'contact_cta' })}
                 />
               </div>
               
@@ -157,6 +194,11 @@ const ContactCTA = () => {
                 type="submit"
                 className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white py-4 text-lg font-semibold rounded-full transition-all duration-300 hover:scale-105 hover:shadow-xl"
                 disabled={isSubmitting}
+                onClick={() => {
+                  if (!isSubmitting) {
+                    trackEvent('contact_form_submit_button_click', { form_type: 'contact_cta' });
+                  }
+                }}
               >
                 {isSubmitting ? "Sending..." : "Start My Automation Journey"}
               </Button>
